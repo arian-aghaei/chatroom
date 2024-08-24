@@ -80,6 +80,6 @@ class LoginController extends Controller
 
     public function userDetails()
     {
-        return response()->json(auth()->user());
+        return auth()->user();
     }
 }

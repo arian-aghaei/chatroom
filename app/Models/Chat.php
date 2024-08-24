@@ -16,6 +16,6 @@ class Chat extends Model
      */
     protected $fillable = [
         'context',
-        'sender_id'
+        'user_id'
     ];
 }

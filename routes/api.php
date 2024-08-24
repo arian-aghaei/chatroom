@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\ChatController;
+use App\Http\Controllers\LoginController;
+use App\Http\Middleware\SetUserInteractionMiddleware;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,12 +17,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::post('/login', [LoginController::class, 'login'])->name('login');
+Route::post('/register', [LoginController::class, 'register'])->name('register');
+
+Route::group(['middleware' => ['auth:sanctum', SetUserInteractionMiddleware::class]], function (){
+    Route::get('/user', [LoginController::class, 'userDetails']);
+    Route::get('/onlines', [ChatController::class, 'onlines']);
+    Route::get('/chats', [ChatController::class, 'chats']);
+    Route::post('/chats', [ChatController::class, 'sendChat']);
+    Route::post('/update', [ChatController::class, 'updateUser']);
 });
-
-Route::post('/login', [\App\Http\Controllers\LoginController::class, 'login'])->name('login');
-
-Route::post('/register', [\App\Http\Controllers\LoginController::class, 'register'])->name('register');
-
-Route::get('/userdetail', [\App\Http\Controllers\LoginController::class, 'userDetails'])->middleware('auth:sanctum');
