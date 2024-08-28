@@ -14,6 +14,11 @@ class LoginController extends Controller
 {
 
 
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     * @unauthenticated
+     */
     public function login(Request $request)
     {
         $valid = validator::validate($request->all(), [
@@ -47,6 +52,11 @@ class LoginController extends Controller
 
     }
 
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     * @unauthenticated
+     */
     public function register(Request $request)
     {
         $request->validate( [
