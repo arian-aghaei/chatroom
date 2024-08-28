@@ -62,7 +62,8 @@ class LoginController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'username' => $request->username,
-            'password' => Hash::make($request->password)
+            'password' => Hash::make($request->password),
+            'last_interaction' => now()
         ]);
 
         $token = $user->createToken('authToken')->plainTextToken;

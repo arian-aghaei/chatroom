@@ -11,8 +11,8 @@ class ChatController extends Controller
 {
     public function onlines()
     {
-        $users = User::select('name', 'username')
-            ->where('last_interaction', '>=', now()->subSeconds(15))
+        $users = User::select('name', 'username', 'id')
+            ->where('last_interaction', '>=', now()->subSeconds(60))
             ->orderBy('name')
             ->get();
         return $users;
@@ -20,31 +20,32 @@ class ChatController extends Controller
 
     public function chats()
     {
-        $chats = Chat::select('id', 'context', 'user_id', 'created_at')
+        $chats = Chat::with('user:id,name')
+            ->select('id', 'text', 'userId', 'created_at')
             ->when(\request()->input('last_update'), function ($q, $lastUpdate){
                 $q->where('created_at', '>=', $lastUpdate)
-                    ->orderBy('created_at', 'desc');
+                    ->orderBy('created_at');
             },
             function ($q){
                 $q->where('created_at', '>=', now()->subSeconds(90))
-                    ->orderBy('created_at', 'desc');
+                    ->orderBy('created_at');
             })->get();
 
 
 
-        return [$chats, ['last_update'=>now()]];
+        return ['chats'=>$chats, 'last_update'=>now()];
     }
 
     public function sendChat(Request $request)
     {
         $request->validate([
-            'context'=>'required',
-            'user_id'=>'required|numeric'
+            'text'=>'required',
+            'userId'=>'required|numeric'
         ]);
 
         $chat = Chat::create([
-            'context'=>$request->input('context'),
-            'user_id'=>$request->input('user_id')
+            'text'=>$request->input('text'),
+            'userId'=>$request->input('userId')
         ]);
 
         return response()->json([
