@@ -17,13 +17,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('/login', [LoginController::class, 'login'])->name('login');
 Route::post('/register', [LoginController::class, 'register'])->name('register');
+Route::post('/login', [LoginController::class, 'login'])->name('login');
 
 Route::group(['middleware' => ['auth:sanctum', SetUserInteractionMiddleware::class]], function (){
     Route::get('/user', [LoginController::class, 'userDetails']);
     Route::get('/onlines', [ChatController::class, 'onlines']);
     Route::get('/chats', [ChatController::class, 'chats']);
-    Route::post('/chats', [ChatController::class, 'sendChat']);
+    Route::post('/chats', [ChatController::class, 'sendChat'])->name('sendChat');
     Route::post('/update', [ChatController::class, 'updateUser']);
 });

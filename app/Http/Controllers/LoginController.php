@@ -21,18 +21,12 @@ class LoginController extends Controller
      */
     public function login(Request $request)
     {
-        $valid = validator::validate($request->all(), [
+        $valid=$request->validate([
             'email'=>'required|email',
             'password'=>'required'
         ]);
-//        if ($valid->fails()) {
-//            return response()->json($valid->errors(), 422);
-//        }
 
-        $cridentials = $request->only('email', 'password');
-
-
-        if(!Auth::attempt($cridentials)){
+        if(!Auth::attempt($valid)){
             return response()->json([
                 'status'=>'error',
                 'message'=>'unauthorized'
@@ -41,6 +35,7 @@ class LoginController extends Controller
 
         $user = Auth::user();
         $token = $user->createToken('authToken')->plainTextToken;
+
         return response()->json([
             'status'=> 'success',
             'user'=> $user,
