@@ -27,7 +27,7 @@ class ChatController extends Controller
                     ->orderBy('created_at');
             },
             function ($q){
-                $q->where('created_at', '>=', now()->subSeconds(90))
+                $q //->where('created_at', '>=', now()->subSeconds(90))
                     ->orderBy('created_at');
             })->get();
 
@@ -40,12 +40,13 @@ class ChatController extends Controller
     {
         $request->validate([
             'text'=>'required',
-            'userId'=>'required|numeric'
         ]);
+
+        $userid = \auth()->user()['id'];
 
         $chat = Chat::create([
             'text'=>$request->input('text'),
-            'userId'=>$request->input('userId')
+            'userId'=>$userid
         ]);
 
         return response()->json([
