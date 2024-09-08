@@ -26,4 +26,5 @@ Route::group(['middleware' => ['auth:sanctum', SetUserInteractionMiddleware::cla
     Route::get('/chats', [ChatController::class, 'chats']);
     Route::post('/chats', [ChatController::class, 'sendChat'])->name('sendChat');
     Route::post('/update', [ChatController::class, 'updateUser']);
+    Route::get('/logout', [ChatController::class, 'logout']);
 });

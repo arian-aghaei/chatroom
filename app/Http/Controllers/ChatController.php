@@ -87,4 +87,9 @@ class ChatController extends Controller
             ]
         ]);
     }
+
+    public function logout()
+    {
+        Auth::guard('sanctum')->user()->tokens()->delete();
+    }
 }
