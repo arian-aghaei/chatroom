@@ -34,6 +34,11 @@ class LoginController extends Controller
         }
 
         $user = Auth::user();
+
+        $user->update([
+            'last_interaction' => now()
+        ]);
+
         $token = $user->createToken('authToken')->plainTextToken;
 
         return response()->json([

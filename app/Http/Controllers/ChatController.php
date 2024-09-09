@@ -92,4 +92,24 @@ class ChatController extends Controller
     {
         Auth::guard('sanctum')->user()->tokens()->delete();
     }
+
+    public function deleteChat(Request $request)
+    {
+        $userid = Auth::id();
+
+        $request->validate([
+            'id' => 'required',
+            'sender_userid' => 'required'
+        ]);
+
+        if ($request->input('sender_userid') != $userid)
+            return;
+
+        $chat = Chat::findOrFail($request->input('id'));
+        $chat->delete();
+
+        return response()->json([
+            'message' => 'chat deleted successfully'
+        ]);
+    }
 }
